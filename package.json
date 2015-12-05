@@ -1,0 +1,13 @@
+{
+  "name": "simon-game",
+  "version": "1.0.0",
+  "description": "fcc Simon Game",
+  "main": "server.js",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-sass": "^2.1.0",
+    "gulp-util": "^3.0.7"
+  }
+}
