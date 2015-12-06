@@ -1,18 +1,129 @@
-.button1 {
-  background-color: red; }
+* {
+  outline: 1px dashed red; }
 
-.button2 {
-  background-color: green; }
+html, body, .container, .columns {
+  height: 100%; }
 
-.button3 {
-  background-color: blue; }
+body {
+  background-image: url("../images/background.jpg"); }
 
-.button4 {
-  background-color: yellow; }
+.row {
+  height: 80%;
+  position: relative; }
 
-.button {
-  cursor: pointer;
-  cursor: hand; }
+.columns {
+  float: left; }
 
-.button-active {
-  opacity: 0.5; }
+@media (max-width: 800px) {
+  .game {
+    width: 80%; } }
+
+@media (min-width: 800px) {
+  .game {
+    width: 70%; } }
+
+@media (min-width: 900px) {
+  .game {
+    width: 60%; } }
+
+@media (min-width: 1200px) {
+  .game {
+    width: 50%; } }
+
+.game {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
+.outer-circle {
+  background-color: #333;
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  drop-shadow: #222;
+  position: relative; }
+
+.inner-circle {
+  background-color: #333;
+  width: 50%;
+  padding-bottom: 50%;
+  border-radius: 50%;
+  drop-shadow: #222;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-top: 25%;
+  margin-left: 25%;
+  z-index: 10; }
+
+.control-cirle {
+  background-color: white;
+  width: 90%;
+  padding-bottom: 90%;
+  border-radius: 50%;
+  drop-shadow: #222;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-top: 5%;
+  margin-left: 5%; }
+
+.button-green {
+  background-color: green;
+  width: 45%;
+  padding-bottom: 45%;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 5%; }
+
+.button-red {
+  background-color: red;
+  width: 45%;
+  padding-bottom: 45%;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  margin-top: 5%;
+  margin-left: 50%;
+  transform: rotate(90deg); }
+
+.button-yellow {
+  background-color: yellow;
+  width: 45%;
+  padding-bottom: 45%;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  margin-top: 50%;
+  margin-left: 5%;
+  transform: rotate(270deg); }
+
+.button-blue {
+  background-color: blue;
+  width: 45%;
+  padding-bottom: 45%;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  margin-top: 50%;
+  margin-left: 50%;
+  transform: rotate(180deg); }
+
+.cross-vertical {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 5%;
+  height: 100%;
+  background-color: #333;
+  z-index: 5; }
+
+.cross-horizontal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 5%;
+  background-color: #333;
+  z-index: 5; }

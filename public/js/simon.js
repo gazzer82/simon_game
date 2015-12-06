@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+/*
 //JQuery Bits
 $(document).ready(function(){
   setWindow();
@@ -109,4 +118,4 @@ function testButton(button){
   console.log(typeof button.id);
   console.log(typeof gameArray[userIndex]);
   return (gameArray[userIndex] === parseInt(button.id,10));
-}
+}*/

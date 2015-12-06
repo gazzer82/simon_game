@@ -1,0 +1,29 @@
+html
+	head
+		title 'Simon Game'
+		link(rel='stylesheet', href='/css/style.css')
+	body
+		.container
+			.row
+				.game
+					.outer-circle
+						.button-green
+						.button-red
+						.button-yellow
+						.button-blue
+						.inner-circle
+							.control-cirle
+						.cross-horizontal
+						.cross-vertical
+				//.col-xs-10.col-xs-offset-1.col-lg-6.col-lg-offset-3
+					.row.text-center.gameButtons
+						#1.col-xs-6.button.simonButton.button1.buttonLeft
+						#2.col-xs-6.button.simonButton.button2.buttonRight
+						#3.col-xs-6.button.simonButton.button3.buttonLeft
+						#4.col-xs-6.button.simonButton.button4.buttonRight
+					.row.text-center-controlButtons
+						.col-xs-10.col-xs-offset-1
+							button#startStop.btn.btn-responsive Start
+							button#strict.btn.btn-responsive Strict
+							h3#count.countText 0
+		script(src="js/simon.js")
