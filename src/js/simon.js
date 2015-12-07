@@ -96,8 +96,9 @@ Button.prototype.setOn = function(duration){
 function Game(){
   this.on = false;
   this.running = false;
+  this.demo = false;
   this.moves = [];
-  this.demoLength = 0;
+  this.demoLength = 4;
   this.demoID = 0;
   this.userID = 0;
   return this;
@@ -128,7 +129,39 @@ Game.prototype.mainSwitch = function(state){
 };
 
 Game.prototype.startGame = function(){
+  this.running = true;
+  this.demo = true;
+  this.demoStep();
+};
 
+Game.prototype.demoStep = function(){
+  console.log('starting demo');
+  if(this.demoID <= this.demoLength){
+    switch(this.moves[this.demoID]){
+      case 1:
+        buttons.button1.flash();
+        break;
+      case 2:
+        buttons.button2.flash();
+        break;
+      case 3:
+        buttons.button3.flash();
+        break;
+      case 4:
+        buttons.button4.flash();
+        break;
+    }
+    this.demoID ++;
+    setTimeout(function(){game.demoStep();},3000);
+  } else {
+    this.running = true;
+    this.demo = false;
+    this.userWait();
+  }
+};
+
+Game.prototype.userWait = function(){
+  console.log('waiting for user input');
 };
 
 function setupButtons(){
@@ -159,8 +192,8 @@ function setupButtons(){
   });
 
   //Start game
-  document.querySelector('.switch').addEventListener('click', function(){
-    game.mainSwitch();
+  document.querySelector('.start-button-container').addEventListener('click', function(){
+    game.startGame();
   });
 
 }
