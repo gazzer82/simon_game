@@ -3,37 +3,86 @@
   <head>
     <title>'Simon Game'</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Oswald|VT323">
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="game">
           <div class="outer-circle">
-            <div class="button-green"></div>
-            <div class="button-red"></div>
-            <div class="button-yellow"></div>
-            <div class="button-blue"></div>
+            <div class="button-1 simonButton"></div>
+            <div class="button-2 simonButton"></div>
+            <div class="button-3 simonButton"></div>
+            <div class="button-4 simonButton"></div>
             <div class="inner-circle">
-              <div class="control-cirle"></div>
+              <div class="control-cirle">
+                <div class="controls">
+                  <div class="title"><span class="simon font">Simon<span class="reg font">&reg</span></span></div>
+                  <div class="buttons">
+                    <div class="count buttons-inner">
+                      <div class="count-screen">
+                        <div class="count-screen-inner">
+                          <div class="digit1"> 
+                            <div class="digit1-inner">-</div>
+                          </div>
+                          <div class="digit2"> 
+                            <div class="digit2-inner">-</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="start buttons-inner">
+                      <div class="start-button-container">
+                        <div class="start-button-outer"></div>
+                        <div class="start-button-inner"></div>
+                      </div>
+                    </div>
+                    <div class="strict buttons-inner">
+                      <div class="strict-button-container">
+                        <div class="strict-led"></div>
+                        <div class="strict-button-outer"></div>
+                        <div class="strict-button-inner"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="buttons-text">
+                    <div class="count buttons-inner">
+                      <div class="button-title">COUNT</div>
+                    </div>
+                    <div class="start buttons-inner">
+                      <div class="button-title">START</div>
+                    </div>
+                    <div class="strict buttons-inner">
+                      <div class="button-title">STRICT</div>
+                    </div>
+                  </div>
+                  <div class="onOff-outer">
+                    <div class="onOff-inner">
+                      <div class="offText">
+                        <div class="off-button-title button-title">OFF</div>
+                      </div>
+                      <div class="switch">
+                        <div class="slider"></div>
+                      </div>
+                      <div class="onText">
+                        <div class="on-button-title button-title">ON</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="cross-horizontal"></div>
             <div class="cross-vertical"></div>
           </div>
         </div>
-        <!--.col-xs-10.col-xs-offset-1.col-lg-6.col-lg-offset-3
-        .row.text-center.gameButtons
-        	#1.col-xs-6.button.simonButton.button1.buttonLeft
-        	#2.col-xs-6.button.simonButton.button2.buttonRight
-        	#3.col-xs-6.button.simonButton.button3.buttonLeft
-        	#4.col-xs-6.button.simonButton.button4.buttonRight
-        .row.text-center-controlButtons
-        	.col-xs-10.col-xs-offset-1
-        		button#startStop.btn.btn-responsive Start
-        		button#strict.btn.btn-responsive Strict
-        		h3#count.countText 0
-        -->
       </div>
     </div>
     <script src="js/simon.js"></script>
+    <script>
+      (function() {
+      	init();
+      })();
+    </script>
   </body>
 </html>

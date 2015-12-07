@@ -1,10 +1,30 @@
 //Simon Game SCSS
 
 //Variables
+
+//Sizes for media rules
 $mobile: 800px;
 $tablet: 800px;
 $desktop: 900px;
 $desktop-lg: 1200px;
+
+//Main colors
+$mainGrey: #333;
+$shadowGrey: #222;
+
+//Button color
+$red: #9f0f17;
+$green: #00a74a;
+$yellow: #cca707;
+$blue: #094a8f;
+$red-light: #ff4c4c;
+$green-light: #13ff7c;
+$yellow-light: #fed93f;
+$blue-light: #1c8cff;
+
+//Screen colors
+$redOn: #DC0D29;
+$redOff: #32050C;
 
 //Mixins
 
@@ -32,7 +52,7 @@ $desktop-lg: 1200px;
 //General Styles
 
 *{
-  outline: 1px dashed red;
+  //outline: 1px dashed red;
 }
 
 html, body, .container, .columns{
@@ -67,6 +87,7 @@ body {
 	@media (min-width: $desktop-lg) {
 		width: 50%;	
 	}
+	//max-width: 580px;
 }
 
 //Draw our circles
@@ -76,13 +97,14 @@ body {
 }
 
 .outer-circle{
-	@include circle(#333,100%);
+	@include circle($mainGrey,100%);
 	drop-shadow: #222;
 	position: relative;
+	box-shadow: 0px 0px 3px 3px rgba(2,2,2, 0.5);
 }
 
 .inner-circle{
-	@include circle(#333,50%);
+	@include circle($mainGrey,50%);
 	drop-shadow: #222;
 	position: absolute;
 	left: 0;
@@ -102,35 +124,53 @@ body {
 	margin-left: 5%;
 }
 
-.button-green{
-	@include buttonShape(green,45%,100% 0 0 0);
+//Buttons
+
+.button-1{
+	@include buttonShape($green,45%,100% 0 0 0);
 	position: absolute;
 	margin-top: 5%;
 	margin-left: 5%;
 }
 
-.button-red{
-	@include buttonShape(red,45%,100% 0 0 0);
+.button-2{
+	@include buttonShape($red,45%,100% 0 0 0);
 	position: absolute;
 	margin-top: 5%;
 	margin-left: 50%;
 	transform: rotate(90deg);
 }
 
-.button-yellow{
-	@include buttonShape(yellow,45%,100% 0 0 0);
+.button-3{
+	@include buttonShape($yellow,45%,100% 0 0 0);
 	position: absolute;
 	margin-top: 50%;
 	margin-left: 5%;
 	transform: rotate(270deg);
 }
 
-.button-blue{
-	@include buttonShape(blue,45%,100% 0 0 0);
+.button-4{
+	@include buttonShape($blue,45%,100% 0 0 0);
 	position: absolute;
 	margin-top: 50%;
 	margin-left: 50%;
 	transform: rotate(180deg);
+}
+
+.button-1-on{
+	background-color: $green-light;
+}
+
+.button-2-on{
+	background-color: $red-light;
+}
+
+.button-3-on{
+	background-color: $yellow-light;
+}
+
+.button-4-on{
+	background-color: $blue-light;
 }
 
 .cross-vertical{
@@ -148,6 +188,323 @@ body {
 	background-color: #333;
 	z-index: 5;
 }
+
+.button-enabled{
+	cursor: pointer;
+}
+
+//Inner Controls
+
+
+.controls {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+//Title
+
+.title {
+	font-family: 'Alfa Slab One', cursive;
+	text-align: center;
+	color: $mainGrey;
+	height: 8vw;
+	padding-top: 5vw;
+	position: relative;
+	@media (max-width: $mobile) {
+		padding-top: 5vw;
+		height: 10vw;
+	}
+	@media (min-width: $tablet) {
+		padding-top: 5vw;
+		height: 9vw;	
+	}
+	@media (min-width: $desktop) {
+		padding-top: 4vw;
+		height: 7vw;
+	}
+	@media (min-width: $desktop-lg) {
+		padding-top: 3vw;
+		height: 6vw;
+	}
+}
+
+.simon {
+	font-size: 7vw;
+	margin-left: 2vw;
+	margin-right: 2vw;
+	@media (max-width: $mobile) {
+		font-size: 8vw;
+	}
+	@media (min-width: $tablet) {
+		font-size: 7vw;	
+	}
+	@media (min-width: $desktop) {
+		font-size: 5vw;
+	}
+	@media (min-width: $desktop-lg) {
+		font-size: 5vw;
+	}
+}
+
+
+.reg {
+	vertical-align: super;
+	font-size: 30%;
+}
+
+//Buttons
+
+.buttons{
+	width: 80%;
+	height: 9vw;
+	margin-left: 10%;
+	margin-right: 10%;
+	@media (max-width: $mobile) {
+		height: 10vw;
+	}
+	@media (min-width: $tablet) {
+		height: 8vw;	
+	}
+	@media (min-width: $desktop) {
+		height: 7vw;
+	}
+	@media (min-width: $desktop-lg) {
+		height: 6vw;
+	}
+}
+
+.buttons-text{
+	width: 80%;
+	//height: 9vw;
+	margin-left: 10%;
+	margin-right: 10%;
+	@media (max-width: $mobile) {
+		//height: 8vw;
+	}
+	@media (min-width: $tablet) {
+		//height: 8vw;	
+	}
+	@media (min-width: $desktop) {
+		//height: 7vw;
+	}
+	@media (min-width: $desktop-lg) {
+		//height: 6vw;
+	}
+}
+
+.buttons-inner{
+	height: 100%;
+	width: 33%;
+}
+
+.button-title{
+	font-family: 'Oswald', sans-serif;
+	text-align: center;
+	@media (max-width: $mobile) {
+		font-size: 1.8vw;
+	}
+	@media (min-width: $tablet) {
+		font-size: 1.5vw;	
+	}
+	@media (min-width: $desktop) {
+		font-size: 1.5vw;
+	}
+	@media (min-width: $desktop-lg) {
+		font-size: 1.2vw;
+	}
+}
+
+.count{
+	float: left;
+	width: 40%;
+}
+
+.start{
+	float: left;
+	width: 30%;
+	position: relative;
+}
+
+.strict {
+	float: left;
+	width: 30%;
+	position: relative;
+}
+
+//Count Screen
+.count-screen{
+	background-color: $redOff;
+	margin-left: 5%;
+	margin-top: 10%;
+	height: 70%;
+	width: 90%;
+	border-radius: 15%/30%;
+}
+
+//Start Button
+
+.start-button-container{
+	@include center();
+	width: 7vw;
+	height: 7vw;
+	//margin-top: 15%;
+	cursor: pointer;
+}
+.start-button-outer{
+	@include circle($mainGrey,50%);
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 25%;
+	margin-top: 25%;
+	box-shadow: 0px 0px 2px 2px rgba(2,2,2, 0.4);
+}
+
+.start-button-inner{
+	@include circle(red,35%);
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 32.5%;
+	margin-top: 32.5%;
+}
+
+//Start Button
+
+.strict-button-container{
+	@include center();
+	width: 7vw;
+	height: 7vw;
+	//margin-top: 15%;
+	cursor: pointer;
+
+}
+.strict-button-outer{
+	@include circle($mainGrey,50%);
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 25%;
+	margin-top: 25%;
+	box-shadow: 0px 0px 2px 2px rgba(2,2,2, 0.4);
+}
+
+.strict-button-inner{
+	@include circle(yellow,35%);
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-left: 32.5%;
+	margin-top: 32.5%;
+}
+
+.strict-led{
+	@include circle($mainGrey,15%);
+	margin-left: 42.5%;
+	margin-top: 3%;
+}
+
+//On and Off
+
+.onOff-outer{
+	width: 100%;
+	height: 10%;
+	margin-top: 10%;
+	position: relative;
+}
+
+.onOff-inner{
+	height: 100%;
+	position: relative;
+}
+
+.offText{
+	float: left;
+	height: 100%;
+	width: 40%;
+}
+
+.onText{
+	float: right;
+	height: 100%;
+	width: 40%;
+}
+
+.switch{
+	float: left;
+	width: 20%;
+	height: 100%;
+	background-color: $mainGrey;
+	cursor: pointer;
+}
+
+.off-button-title{
+	height: 100%;
+	line-height: 250%;
+	text-align: right;
+	margin-right: 5%;
+}
+
+.on-button-title{
+	height: 100%;
+	line-height: 250%;
+	text-align: left;
+	margin-left: 5%;
+}
+
+.slider{
+	width: 45%;
+	height: 80%;
+	margin-left: 5%;
+	margin-top: 5%;
+	margin-right: 5%;
+	background-color: #3193DE;
+	border-radius: 15%;
+}
+
+.slider-on{
+	float: right;
+}
+
+//Number Display
+
+.count-screen-inner{
+	position: relative;
+	left: 10%;
+	top: 10%;
+	width: 80%;
+	height: 80%;
+}
+
+.digit1{
+	width: 40%;
+	height: 100%;
+	float: left;
+	position: relative;
+	margin-left: 10%;
+}
+
+.digit1-inner, .digit2-inner{
+	width: 100%;
+	height: 100%;
+	font-family: 'VT323';
+	font-size: 6vw;
+	color: $redOn;
+	display : flex;
+  	align-items : center;
+  	justify-content: center;
+}
+
+.digit2{
+	width: 40%;
+	height: 100%;
+	float: right;
+	position: relative;
+	margin-right: 10%;
+}
+
+
 
 
 

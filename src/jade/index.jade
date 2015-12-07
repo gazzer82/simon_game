@@ -2,28 +2,58 @@ html
 	head
 		title 'Simon Game'
 		link(rel='stylesheet', href='/css/style.css')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Alfa+Slab+One|Oswald|VT323')
 	body
 		.container
 			.row
 				.game
 					.outer-circle
-						.button-green
-						.button-red
-						.button-yellow
-						.button-blue
+						.button-1.simonButton
+						.button-2.simonButton
+						.button-3.simonButton
+						.button-4.simonButton
 						.inner-circle
 							.control-cirle
+								.controls
+									.title
+										span.simon.font Simon
+											span.reg.font &reg
+									.buttons
+										.count.buttons-inner
+											.count-screen
+												.count-screen-inner
+													.digit1 
+														.digit1-inner -
+													.digit2 
+														.digit2-inner -
+										.start.buttons-inner
+											.start-button-container
+												.start-button-outer
+												.start-button-inner
+										.strict.buttons-inner
+											.strict-button-container
+												.strict-led
+												.strict-button-outer
+												.strict-button-inner
+									.buttons-text
+										.count.buttons-inner
+											.button-title COUNT
+										.start.buttons-inner
+											.button-title START
+										.strict.buttons-inner
+											.button-title STRICT
+									.onOff-outer
+										.onOff-inner
+											.offText
+												.off-button-title.button-title OFF
+											.switch
+												.slider
+											.onText
+												.on-button-title.button-title ON
 						.cross-horizontal
 						.cross-vertical
-				//.col-xs-10.col-xs-offset-1.col-lg-6.col-lg-offset-3
-					.row.text-center.gameButtons
-						#1.col-xs-6.button.simonButton.button1.buttonLeft
-						#2.col-xs-6.button.simonButton.button2.buttonRight
-						#3.col-xs-6.button.simonButton.button3.buttonLeft
-						#4.col-xs-6.button.simonButton.button4.buttonRight
-					.row.text-center-controlButtons
-						.col-xs-10.col-xs-offset-1
-							button#startStop.btn.btn-responsive Start
-							button#strict.btn.btn-responsive Strict
-							h3#count.countText 0
 		script(src="js/simon.js")
+		script.
+			(function() {
+				init();
+			})();
