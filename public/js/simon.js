@@ -10,7 +10,9 @@ function init(){
   console.log('ready');
   //Setup Buttons
   setupButtons();
-  oscillator.connect(context.destination);
+  //oscillator.connect(context.destination);
+  game.generate();
+  console.log(game);
 }
 
 //Button Object
@@ -93,8 +95,20 @@ Button.prototype.setOn = function(duration){
 
 function Game(){
   this.on = false;
+  this.running = false;
+  this.moves = [];
+  this.demoLength = 0;
+  this.demoID = 0;
+  this.userID = 0;
   return this;
 }
+
+Game.prototype.generate = function(){
+  this.moves = [];
+  for(var i=0;i<20;i++){
+    this.moves.push(Math.floor(Math.random()*4)+1);
+  }
+};
 
 //Toggle the game on/off
 Game.prototype.mainSwitch = function(state){
@@ -111,6 +125,10 @@ Game.prototype.mainSwitch = function(state){
     //Disable the buttons hover state
     toggleButtons();
   }
+};
+
+Game.prototype.startGame = function(){
+
 };
 
 function setupButtons(){
@@ -139,6 +157,12 @@ function setupButtons(){
   document.querySelector('.switch').addEventListener('click', function(){
     game.mainSwitch();
   });
+
+  //Start game
+  document.querySelector('.switch').addEventListener('click', function(){
+    game.mainSwitch();
+  });
+
 }
 
 
