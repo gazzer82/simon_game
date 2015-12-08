@@ -5,14 +5,24 @@ var game = new Game();
 
 var context = new AudioContext();
 var oscillator = context.createOscillator();
+var errorOscillator = context.createOscillator();
+var errorGainNode = context.createGain();
+var errorTime = 1000;
+var screenTimer;
 
 var buttonDelay = 500;
+
+var digit1;
+var digit2;
+var strictLED;
 
 function init(){
   console.log('ready');
   setupButtons();
+  setupError();
+  setupScreen();
   game.generate();
-  console.log(game);
+  updateDisplay();
 }
 
 //Button Object
@@ -106,8 +116,8 @@ function Game(){
     that.demoID = 0;
     that.userID = 0;
     that.userTimer = undefined;
-    that.userTimeout = 3000;
-    that.stepTimer = 3000;
+    that.userTimeout = 2000;
+    that.stepTimer = 2000;
     that.strict = false;
   };
   this.gameInit();
@@ -126,6 +136,8 @@ Game.prototype.mainSwitch = function(state){
   //Toggle tje state
   this.on = !this.on;
   if(this.on){
+    //Blink the screen
+    blinkScreen('--');
     //Set the switch to on by adding the 'slider-on' class
     document.querySelector('.slider').setAttribute('class', 'slider slider-on');
     //Enable the buttons hover state
@@ -137,9 +149,21 @@ Game.prototype.mainSwitch = function(state){
     toggleButtons();
     //Turn all buttons off
     allButtonsOff();
+    //Disable the user or demo timers
+    clearTimeout(this.userTimer);
+    clearTimeout(screenTimer);
     //Stop and demos or timers
     this.gameInit();
     this.on = false;
+    //Turn screen off
+    updateDisplay();
+  }
+};
+
+Game.prototype.toggleStrict = function(){
+  if(this.on){
+    this.strict = !this.strict;
+    updateStrictButtonLED();
   }
 };
 
@@ -157,7 +181,18 @@ Game.prototype.startGame = function(){
 Game.prototype.demoStep = function(){
   console.log('starting demo');
   console.log(this.demoID);
+  var that = this;
+  if(this.demoLength <4){
+    this.stepTimer = 2000;
+  }else if(this.demoLength < 9){
+    this.stepTimer = 1500;
+  } else {
+    this.stepTimer = 1000;
+  }
+  console.log(this.demoLength);
+  console.log(this.stepTimer);
   if(this.demoID <= this.demoLength && this.on){
+    updateDisplay(this.demoID+1);
     switch(this.moves[this.demoID]){
       case 1:
         buttons.button1.flash();
@@ -173,7 +208,7 @@ Game.prototype.demoStep = function(){
         break;
     }
     this.demoID ++;
-    setTimeout(function(){game.demoStep();},3000);
+    setTimeout(function(){game.demoStep();},that.stepTimer);
   } else if (this.on){
     this.running = true;
     this.demo = false;
@@ -182,16 +217,21 @@ Game.prototype.demoStep = function(){
 };
 
 Game.prototype.failure = function(){
+  //Show an error to the user
+  errorAlert();
+  var that = this;
   //Check to see if we're being strict or not
   if(this.strict === false){
     //If we're not, reset the demoID and userID and restart the demo
     this.demo = true;
     this.demoID = 0;
     this.userID = 0;
-    this.demoStep();
+    setTimeout(function(){game.demoStep();},errorTime+500);
   } else {
     //If we are being strict then fully reset the game and start again
-    this.startGame();
+    setTimeout(function(){
+      that.startGame();
+    },errorTime+500);
   }
 };
 
@@ -205,39 +245,42 @@ Game.prototype.userWait = function(){
   var that = this;
   this.userTimer = setTimeout(function(){
     that.userTimedout();
-  },3000);
+  },this.userTimeout);
 };
 
 //User has pressed button
 Game.prototype.buttonPressed = function(button){
   //Clear the timeout waiting for input
-  clearTimeout(this.userTimer);
-  //Check to see if it's the correct button
-  if(parseInt(button,10) === this.moves[this.userID]){
-    console.log('correct button press');
-    //Test to see if this is the last button in the current sequnce
-    if(this.userID === this.demoLength){
-      //If so check so see if it's the last move
-      if(this.userID === 19){
-        console.log('Winner!!');
-      }else{
-        //If not start the next sequnce
-        this.userID = 0;
-        this.demoID = 0;
-        this.demoLength ++;
-        this.demo = true;
-        //Delay the next demo run so we have enough time for the buttons to turn off
-        setTimeout(function(thisObject){thisObject.demoStep();},buttonDelay,this);
+  if(!this.demo){
+    clearTimeout(this.userTimer);
+    //Check to see if it's the correct button
+    if(parseInt(button,10) === this.moves[this.userID]){
+      console.log('correct button press');
+      //Test to see if this is the last button in the current sequnce
+      if(this.userID === this.demoLength){
+        //If so check so see if it's the last move
+        if(this.userID === 19){
+          console.log('Winner!!');
+          this.gameInit();
+        }else{
+          //If not start the next sequnce
+          this.userID = 0;
+          this.demoID = 0;
+          this.demoLength ++;
+          this.demo = true;
+          //Delay the next demo run so we have enough time for the buttons to turn off
+          setTimeout(function(thisObject){thisObject.demoStep();},buttonDelay,this);
+        }
+      } else {
+        //Else this is not the last button the user needs to enter, so increase the user is and restart the timer waiting for input.
+        this.userID ++;
+        this.userWait();
       }
     } else {
-      //Else this is not the last button the user needs to enter, so increase the user is and restart the timer waiting for input.
-      this.userID ++;
-      this.userWait();
+    //Incorrect button press so call the failure method.
+      console.log('incorrect button press');
+      this.failure();
     }
-  } else {
-  //Incorrect button press so call the failure method.
-    console.log('incorrect button press');
-    this.failure();
   }
 };
 
@@ -276,6 +319,17 @@ function setupButtons(){
     game.startGame();
   });
 
+  //Toggle Strict Mode
+  document.querySelector('.strict-button-container').addEventListener('click', function(){
+    game.toggleStrict();
+  });
+
+}
+
+function setupError(){
+  errorOscillator.connect(errorGainNode);
+  errorOscillator.frequency.value = 250;
+  errorOscillator.start();
 }
 
 
@@ -294,3 +348,62 @@ function allButtonsOff(){
   }
 }
 
+function errorAlert(){
+  errorGainNode.connect(context.destination);
+  errorGainNode.gain.value = 2;
+  blinkScreen('!!');
+  setTimeout(function(){
+    errorGainNode.gain.value = 0;
+    errorGainNode.disconnect(context.destination);
+  },errorTime);
+}
+
+function setupScreen(){
+  digit1 = document.querySelector('.digit1-inner');
+  digit2 = document.querySelector('.digit2-inner');
+  strictLED = document.querySelector('.strict-led');
+}
+
+function createScrenText(screenMessage){
+  var screenArray = ['',''];
+  if(screenMessage){
+    var screenMessageSplit = (typeof screenMessage  === 'string') ? screenMessage.split('') : (screenMessage.toString()).split('');
+    screenMessageSplit = (screenMessageSplit.length == 1) ? ['0',screenMessageSplit[0]] : screenMessageSplit;
+    screenArray[0] = (screenMessageSplit[0]);
+    screenArray[1] = (screenMessageSplit[1]);
+  }
+  return screenArray;
+}
+
+function updateDisplay(screenMessage){
+  writeScreen(createScrenText(screenMessage));
+}
+
+function writeScreen(messageArray){
+  if(game.on){
+    digit1.textContent = messageArray[0];
+    digit2.textContent = messageArray[1];
+  } else {
+    digit1.textContent = '';
+    digit2.textContent = '';
+  }
+}
+
+function blinkScreen(screenMessage){
+  var screenMessageSplit = createScrenText(screenMessage);
+  writeScreen(screenMessageSplit);
+  setTimeout(function(){
+    writeScreen(['','']);
+  },500);
+  setTimeout(function(){
+    writeScreen(screenMessageSplit);
+  },1000);
+}
+
+function updateStrictButtonLED(){
+  if(game.strict){
+    strictLED.classList.add('strict-led-on');
+  } else {
+    strictLED.classList.remove('strict-led-on');
+  }
+}

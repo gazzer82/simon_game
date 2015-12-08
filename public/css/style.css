@@ -328,6 +328,9 @@ body {
   margin-left: 42.5%;
   margin-top: 3%; }
 
+.strict-led-on {
+  background-color: #DC0D29; }
+
 .onOff-outer {
   width: 100%;
   height: 10%;
