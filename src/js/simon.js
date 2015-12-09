@@ -3,10 +3,11 @@
 var buttons = {};
 var game = new Game();
 
-var context = new AudioContext();
-var oscillator = context.createOscillator();
-var errorOscillator = context.createOscillator();
-var errorGainNode = context.createGain();
+//var context = new AudioContext();
+var context; 
+var oscillator;
+var errorOscillator;
+var errorGainNode;
 var errorTime = 1000;
 var screenTimer;
 
@@ -17,12 +18,24 @@ var digit2;
 var strictLED;
 
 function init(){
-  console.log('ready');
+  setupAudio();
   setupButtons();
   setupError();
   setupScreen();
   game.generate();
   updateDisplay();
+}
+
+function setupAudio(){
+  window.AudioContext = window.AudioContext || window.webkitAudioContext  || false;
+  context = new AudioContext();
+  if(context){
+    oscillator = context.createOscillator();
+    errorOscillator = context.createOscillator();
+    errorGainNode = context.createGain();
+  } else {
+    alert('Audio Contect not supported on this browser');
+  }
 }
 
 //Button Object
@@ -124,9 +137,16 @@ function Game(){
   return this;
 }
 
-Game.prototype.generate = function(){
+/*Game.prototype.generate = function(){
   this.moves = [];
   for(var i=0;i<20;i++){
+    this.moves.push(Math.floor(Math.random()*4)+1);
+  }
+};*/
+
+Game.prototype.generate = function(){
+  this.moves = [];
+  for(var i=0;i<2;i++){
     this.moves.push(Math.floor(Math.random()*4)+1);
   }
 };
@@ -141,12 +161,11 @@ Game.prototype.mainSwitch = function(state){
     //Set the switch to on by adding the 'slider-on' class
     document.querySelector('.slider').setAttribute('class', 'slider slider-on');
     //Enable the buttons hover state
-    toggleButtons();
   } else {
     //Set the switch to off by removing the 'slider-on' class
     document.querySelector('.slider').setAttribute('class', 'slider');
     //Disable the buttons hover state
-    toggleButtons();
+    disableButtons();
     //Turn all buttons off
     allButtonsOff();
     //Disable the user or demo timers
@@ -168,30 +187,37 @@ Game.prototype.toggleStrict = function(){
 };
 
 Game.prototype.startGame = function(){
-  this.generate();
-  this.demoLength = 0;
-  this.demoID = 0;
-  this.userID = 0;
-  this.userTimer = undefined;
-  this.running = true;
-  this.demo = true;
-  this.demoStep();
+  if(this.running === true){
+    this.running = false;
+    this.restart();
+  } else {
+    this.running = true;
+    this.generate();
+    this.demoLength = 0;
+    this.demoID = 0;
+    this.userID = 0;
+    this.userTimer = undefined;
+    this.running = true;
+    this.demo = true;
+    this.running = true;
+    this.demoStep();
+  }
 };
 
 Game.prototype.demoStep = function(){
-  console.log('starting demo');
-  console.log(this.demoID);
   var that = this;
   if(this.demoLength <4){
     this.stepTimer = 2000;
   }else if(this.demoLength < 9){
     this.stepTimer = 1500;
-  } else {
+  } else if(this.demoLength < 13){
     this.stepTimer = 1000;
+  } else {
+    this.stepTimer = 700;
   }
-  console.log(this.demoLength);
-  console.log(this.stepTimer);
   if(this.demoID <= this.demoLength && this.on){
+    //Disable the buttons
+    disableButtons();
     updateDisplay(this.demoID+1);
     switch(this.moves[this.demoID]){
       case 1:
@@ -210,6 +236,7 @@ Game.prototype.demoStep = function(){
     this.demoID ++;
     setTimeout(function(){game.demoStep();},that.stepTimer);
   } else if (this.on){
+    enableButtons();
     this.running = true;
     this.demo = false;
     this.userWait();
@@ -235,13 +262,36 @@ Game.prototype.failure = function(){
   }
 };
 
+Game.prototype.winner = function() {
+  console.log('winner');
+  this.gameInit();
+  disableButtons();
+  this.on = true;
+  //Blink the screen
+  scrollWinner();
+  var that = this;
+  //this.mainSwitch();
+  setTimeout(function(){
+    that.startGame();
+  },5000);
+};
+
+Game.prototype.restart = function() {
+    var that = this;
+    this.mainSwitch();
+  setTimeout(function(){
+    that.mainSwitch();
+  },100);
+  setTimeout(function(){
+    that.startGame();
+  },1500);
+};
+
 Game.prototype.userTimedout = function(){
-  console.log('out of time');
   this.failure();
 };
 
 Game.prototype.userWait = function(){
-  console.log('waiting for user input');
   var that = this;
   this.userTimer = setTimeout(function(){
     that.userTimedout();
@@ -255,13 +305,11 @@ Game.prototype.buttonPressed = function(button){
     clearTimeout(this.userTimer);
     //Check to see if it's the correct button
     if(parseInt(button,10) === this.moves[this.userID]){
-      console.log('correct button press');
       //Test to see if this is the last button in the current sequnce
       if(this.userID === this.demoLength){
         //If so check so see if it's the last move
-        if(this.userID === 19){
-          console.log('Winner!!');
-          this.gameInit();
+        if(this.userID === this.moves.length - 1){
+          this.winner();
         }else{
           //If not start the next sequnce
           this.userID = 0;
@@ -269,7 +317,7 @@ Game.prototype.buttonPressed = function(button){
           this.demoLength ++;
           this.demo = true;
           //Delay the next demo run so we have enough time for the buttons to turn off
-          setTimeout(function(thisObject){thisObject.demoStep();},buttonDelay,this);
+          setTimeout(function(thisObject){thisObject.demoStep();},buttonDelay+500,this);
         }
       } else {
         //Else this is not the last button the user needs to enter, so increase the user is and restart the timer waiting for input.
@@ -278,7 +326,6 @@ Game.prototype.buttonPressed = function(button){
       }
     } else {
     //Incorrect button press so call the failure method.
-      console.log('incorrect button press');
       this.failure();
     }
   }
@@ -309,11 +356,11 @@ function setupButtons(){
     buttons.button4.click();
   });
 
+
   //Main game on/off button
   document.querySelector('.switch').addEventListener('click', function(){
     game.mainSwitch();
   });
-
   //Start game
   document.querySelector('.start-button-container').addEventListener('click', function(){
     game.startGame();
@@ -333,10 +380,17 @@ function setupError(){
 }
 
 
-function toggleButtons(){
+function enableButtons(){
   var buttons = document.getElementsByClassName("simonButton");
   for(var i = 0;i<buttons.length;i++){
-    buttons[i].classList.toggle('button-enabled');
+    buttons[i].classList.add('button-enabled');
+  }
+}
+
+function disableButtons(){
+  var buttons = document.getElementsByClassName("simonButton");
+  for(var i = 0;i<buttons.length;i++){
+    buttons[i].classList.remove('button-enabled');
   }
 }
 
@@ -405,5 +459,26 @@ function updateStrictButtonLED(){
     strictLED.classList.add('strict-led-on');
   } else {
     strictLED.classList.remove('strict-led-on');
+  }
+}
+
+function scrollWinner(){
+  var winnerString = 'Winner!';
+  var winnerArray = winnerString.split('');
+  var timerCount = 0;
+  for(var i=0;i<(winnerArray.length + 2); i++){
+    timerCount += 500;
+    console.log(timerCount);
+    var digits = [];
+    var digit1Scroll = (i-1>=0 && i-1 < winnerArray.length) ? winnerArray[i-1] : '';
+    var digit2Scroll = (i>=0 && i < winnerArray.length) ? winnerArray[i] : '';
+    digits.push(digit1Scroll);
+    digits.push(digit2Scroll);
+    (function (digits2){
+      setTimeout(function(){
+        digit1.textContent = digits2[0];
+        digit2.textContent = digits2[1];
+      },timerCount);
+    })(digits);
   }
 }
