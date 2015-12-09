@@ -2,7 +2,7 @@ html, body, .container, .columns {
   height: 100%; }
 
 body {
-  background-image: url("../images/background.jpg"); }
+  background-image: url("http://s3.amazonaws.com/fccassets/images/background.jpg"); }
 
 .row {
   height: 80%;
@@ -26,6 +26,10 @@ body {
 @media (min-width: 1200px) {
   .game {
     width: 50%; } }
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+  .game {
+    width: 90%; } }
 
 .game {
   position: absolute;
@@ -169,6 +173,10 @@ body {
     .title {
       padding-top: 3vw;
       height: 6vw; } }
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+    .title {
+      padding-top: 5vw;
+      height: 10vw; } }
 
 .simon {
   font-size: 7vw;
@@ -186,6 +194,9 @@ body {
   @media (min-width: 1200px) {
     .simon {
       font-size: 5vw; } }
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+    .simon {
+      font-size: 8vw; } }
 
 .reg {
   vertical-align: super;
@@ -208,6 +219,9 @@ body {
   @media (min-width: 1200px) {
     .buttons {
       height: 6vw; } }
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+    .buttons {
+      height: 10vw; } }
 
 .buttons-text {
   width: 80%;
@@ -233,6 +247,9 @@ body {
   @media (min-width: 1200px) {
     .button-title {
       font-size: 1.2vw; } }
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 3) and (-webkit-device-pixel-ratio: 3) {
+    .button-title {
+      font-size: 1.8vw; } }
 
 .count {
   float: left;
@@ -271,7 +288,7 @@ body {
   padding-bottom: 50%;
   border-radius: 50%;
   position: absolute;
-  top: 0;
+  top: 1px;
   left: 0;
   margin-left: 25%;
   margin-top: 25%;
@@ -283,7 +300,7 @@ body {
   padding-bottom: 35%;
   border-radius: 50%;
   position: absolute;
-  top: 0;
+  top: 1px;
   left: 0;
   margin-left: 32.5%;
   margin-top: 32.5%; }
@@ -330,6 +347,10 @@ body {
 
 .strict-led-on {
   background-color: #DC0D29; }
+
+.button-clicked-outer {
+  top: 0;
+  box-shadow: none; }
 
 .onOff-outer {
   width: 100%;
@@ -395,6 +416,10 @@ body {
   float: left;
   position: relative;
   margin-left: 10%; }
+
+@supports (overflow: -webkit-marquee) and (justify-content: inherit) {
+  .digit1 {
+    margin-left: 0; } }
 
 .digit1-inner, .digit2-inner {
   width: 100%;

@@ -190,7 +190,7 @@ Game.prototype.startGame = function(){
   if(this.running === true){
     this.running = false;
     this.restart();
-  } else {
+  } else if (game.on){
     this.running = true;
     this.generate();
     this.demoLength = 0;
@@ -362,13 +362,21 @@ function setupButtons(){
     game.mainSwitch();
   });
   //Start game
-  document.querySelector('.start-button-container').addEventListener('click', function(){
+  document.querySelector('.start-button-inner').addEventListener('click', function(){
     game.startGame();
+    document.querySelector('.start-button-outer').classList.add('button-clicked-outer');
+    setTimeout(function(){
+      document.querySelector('.start-button-outer').classList.remove('button-clicked-outer');
+    },100);
   });
 
   //Toggle Strict Mode
-  document.querySelector('.strict-button-container').addEventListener('click', function(){
+  document.querySelector('.strict-button-inner').addEventListener('click', function(){
     game.toggleStrict();
+    document.querySelector('.strict-button-outer').classList.add('button-clicked-outer');
+    setTimeout(function(){
+      document.querySelector('.strict-button-outer').classList.remove('button-clicked-outer');
+    },100);
   });
 
 }
